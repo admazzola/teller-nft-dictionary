@@ -153,10 +153,10 @@ describe("TellerNFTDictionary", async function() {
    console.log('tokenTierMappingCompressed',tokenTierMappingCompressed)
 
 
-   let gasEstimate =  await dictionaryContract.estimateGas.addTokenTierMapping( tokenTierMappingCompressed , {from:signerAccount.address }) ;  
+   let gasEstimate =  await dictionaryContract.estimateGas.setAllTokenTierMappings( tokenTierMappingCompressed , {from:signerAccount.address }) ;  
    console.log(' addTokenTierMapping gasEstimate',gasEstimate.toString())
 
-    await dictionaryContract.addTokenTierMapping( tokenTierMappingCompressed , {from:signerAccount.address }) ;  
+    await dictionaryContract.setAllTokenTierMappings( tokenTierMappingCompressed , {from:signerAccount.address }) ;  
     
      let tokenTierIndex = await dictionaryContract.getTokenTierIndex('1')
      expect(tokenTierIndex).to.equal(33);

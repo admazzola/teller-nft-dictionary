@@ -136,7 +136,7 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
      * @dev Can be costly if calling within a contract for address with many tokens.
      */
     function getTierHashes(uint256 tierIndex)
-        external
+        public
         view
          
         returns (string[] memory hashes_)
@@ -173,13 +173,21 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
          
     } 
 
-    function addTokenTierMapping(uint256[] memory tiersMapping) 
+    function setAllTokenTierMappings(uint256[] memory tiersMapping) 
     external 
     onlyAdmin {
 
-       // _tokenTier[0] = 0 ;
-       _tokenTierMappingCompressed[0] = tiersMapping[0];
-        
+        for(uint256 i=0; i< tiersMapping.length; i++){
+            _tokenTierMappingCompressed[i] = tiersMapping[i];
+        } 
+         
+    } 
+
+    function setTokenTierMapping(uint256 index, uint256 tierMapping) 
+    external 
+    onlyAdmin {
+         
+      _tokenTierMappingCompressed[index] = tierMapping; 
          
     } 
 
@@ -226,7 +234,6 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
     {  
         uint8 tokenTier = getTokenTierIndex(tokenId);
 
-
         return _baseLoanSizes[tokenTier];
     }
 
@@ -242,7 +249,7 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
     {
         uint8 tokenTier = getTokenTierIndex(tokenId);
 
-        string[] storage tierImageHashes = _hashes[tokenTier];
+        string[] memory tierImageHashes = getTierHashes(tokenTier);
         return tierImageHashes[tokenId.mod(tierImageHashes.length)];
  
     }
@@ -257,11 +264,8 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
         override     
         returns (address)
     {  
-
         uint8 tokenTier = getTokenTierIndex(tokenId);
-
-       
-
+    
         return _contributionAsset[tokenTier];
     }
 
@@ -275,9 +279,7 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
         override    
         returns (uint256)
     {  
-
         uint8 tokenTier = getTokenTierIndex(tokenId);
-
           
         return _contributionSize[tokenTier];
     }
@@ -293,7 +295,6 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
         returns (uint256)
     {  
         uint8 tokenTier = getTokenTierIndex(tokenId);
-
        
         return _contributionMultiplier[tokenTier];
     }
