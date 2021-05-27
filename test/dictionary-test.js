@@ -24,6 +24,22 @@ describe("TellerNFTDictionary", async function() {
    
   });
 
+  it("Should add token tier mappings", async function() {
+
+   // getTokenTier
+
+
+
+
+    await dictionaryContract.addTokenTierMapping( [ '0x11111111' ] , {from:signerAccount.address }) ;  
+    
+     let tokenTierIndex = await dictionaryContract.getTokenTierIndex('0')
+     expect(tokenTierIndex).to.equal("2500000000000000000000");
+   
+
+
+  });
+
 
   it("Should add tier data", async function() {
  
@@ -224,7 +240,11 @@ describe("TellerNFTDictionary", async function() {
     await dictionaryContract.setTier(0, Tier0, {from:signerAccount.address }) ;  
     await dictionaryContract.setTier(1, Tier1, {from:signerAccount.address }) ;  
     await dictionaryContract.setTier(2, Tier2, {from:signerAccount.address }) ;  
- 
+    
+
+    let baseLoanSizeGasEstimate = await dictionaryContract.estimateGas.tokenBaseLoanSize('0')
+    console.log('baseLoanSizeGasEstimate',baseLoanSizeGasEstimate.toString())
+
     let baseLoanSize = await dictionaryContract.tokenBaseLoanSize('0')
     expect(baseLoanSize).to.equal("2500000000000000000000");
    

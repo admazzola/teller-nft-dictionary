@@ -26,13 +26,22 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
     using EnumerableSet for EnumerableSet.UintSet;
     using SafeMath for uint256;
 
-    struct Tier {
+     struct Tier {
         uint256 baseLoanSize;
         string[] hashes;
         address contributionAsset;
         uint256 contributionSize;
         uint8 contributionMultiplier;
-    }
+    } 
+
+    mapping(uint256 => uint256) internal _baseLoanSizes;
+    mapping(uint256 => string[]) internal _hashes;
+    mapping(uint256 => address) internal _contributionAsset;
+    mapping(uint256 => uint256) internal _contributionSize;
+    mapping(uint256 => uint8) internal _contributionMultiplier;
+
+ 
+
 
     /* Constants */
 
@@ -43,10 +52,14 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
     /* State Variables */
  
     // It holds the information about a tier.
-    mapping(uint256 => Tier) internal _tiers;
+    //mapping(uint256 => Tier) internal _tiers;
 
     // It holds which tier a token ID is in.
-    mapping(uint256 => uint256) internal _tokenTier;
+    //mapping(uint256 => uint256) internal _tokenTier;
+
+
+
+    mapping(uint256 => uint256) public _tokenTierMappingCompressed;
 
    
 
@@ -65,31 +78,43 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
 
     /* External Functions */
 
-    /**
-     * @notice It returns information about a Tier for a token ID.
-     * @param index Tier index to get info.
-     */
-    function getTier(uint256 index)
+   
+  /*  function getTier(uint256 index)
         external
         view
          
         returns (Tier memory tier_)
     {
         tier_ = _tiers[index];
-    }
+    }*/
 
     /**
      * @notice It returns information about a Tier for a token ID.
      * @param tokenId ID of the token to get Tier info.
      */
-    function getTokenTier(uint256 tokenId)
-        external
+    function getTokenTierIndex(uint256 tokenId)
+        public
         view
          
-        returns (uint256 index_, Tier memory tier_)
+        returns (uint8 index_)
     {
-        index_ = _tokenTier[tokenId];
-        tier_ = _tiers[index_];
+        //index_ = _tokenTier[tokenId]; 
+
+        //32 * 8 = 256 - each uint256 holds the data of 32 tokens . 8 bits each.  
+
+        uint256 mappingIndex = tokenId.div(32);
+
+        uint256 compressedRegister = _tokenTierMappingCompressed[mappingIndex];
+
+        //uint256 filter = 255; // equals 11111111 in binary
+
+        uint256 offset = (tokenId.mod(32).mul(8)); 
+
+        uint8 tierIndex = uint8( (compressedRegister << offset) );
+        //uint8 bit7 = a & (1 << 6)
+
+        return tierIndex ;
+
     }
 
     /**
@@ -103,7 +128,8 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
          
         returns (string[] memory hashes_)
     {
-        hashes_ = _tiers[tierIndex].hashes;
+
+      hashes_ = _hashes[tierIndex];
     } 
 
     /**
@@ -114,15 +140,33 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
      * Requirements:
      *  - Caller must have the {Admin} role
      */
-    function setTier(uint256 index, Tier memory newTier) external onlyAdmin {
-        Tier storage tier = _tiers[index];
+    function setTier(uint256 index, Tier memory newTier) 
+    external 
+    onlyAdmin {
+       /* Tier storage tier = _tiers[index];
 
         tier.baseLoanSize = newTier.baseLoanSize;
         tier.hashes = newTier.hashes;
         tier.contributionAsset = newTier.contributionAsset;
         tier.contributionSize = newTier.contributionSize;
         tier.contributionMultiplier = newTier.contributionMultiplier;
+         */
+           
+        _baseLoanSizes[index] = newTier.baseLoanSize;
+        _hashes[index] = newTier.hashes;
+        _contributionAsset[index] = newTier.contributionAsset;
+        _contributionSize[index] = newTier.contributionSize;
+        _contributionMultiplier[index] = newTier.contributionMultiplier;
+         
+    } 
 
+    function addTokenTierMapping(uint256[] memory tiersMapping) 
+    external 
+    onlyAdmin {
+
+       // _tokenTier[0] = 0 ;
+       _tokenTierMappingCompressed[0] = tiersMapping[0];
+        
          
     } 
 
@@ -167,7 +211,10 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
         override   
         returns (uint256)
     {  
-        return _tiers[_tokenTier[tokenId]].baseLoanSize;
+        uint8 tokenTier = getTokenTierIndex(tokenId);
+
+
+        return _baseLoanSizes[tokenTier];
     }
 
     /**
@@ -180,8 +227,11 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
         override
         returns (string memory)
     {
-        string[] storage tierImageHashes = _tiers[_tokenTier[tokenId]].hashes;
+        uint8 tokenTier = getTokenTierIndex(tokenId);
+
+        string[] storage tierImageHashes = _hashes[tokenTier];
         return tierImageHashes[tokenId.mod(tierImageHashes.length)];
+ 
     }
 
     /**
@@ -194,7 +244,12 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
         override     
         returns (address)
     {  
-        return _tiers[_tokenTier[tokenId]].contributionAsset;
+
+        uint8 tokenTier = getTokenTierIndex(tokenId);
+
+       
+
+        return _contributionAsset[tokenTier];
     }
 
     /**
@@ -207,7 +262,11 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
         override    
         returns (uint256)
     {  
-        return _tiers[_tokenTier[tokenId]].contributionSize;
+
+        uint8 tokenTier = getTokenTierIndex(tokenId);
+
+          
+        return _contributionSize[tokenTier];
     }
 
     /**
@@ -220,7 +279,10 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
         override   
         returns (uint256)
     {  
-        return _tiers[_tokenTier[tokenId]].contributionMultiplier;
+        uint8 tokenTier = getTokenTierIndex(tokenId);
+
+       
+        return _contributionMultiplier[tokenTier];
     }
 
 
