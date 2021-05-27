@@ -14,6 +14,9 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 // Interfaces
 import "./IStakeableNFT.sol";
 
+
+
+ 
 /**
  * @notice This contract is used by borrowers to call Dapp functions (using delegate calls).
  * @notice This contract should only be constructed using it's upgradeable Proxy contract.
@@ -21,10 +24,11 @@ import "./IStakeableNFT.sol";
  *
  * @author develop@teller.finance
  */
-contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControlUpgradeable  {
+contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessControlUpgradeable  {
      
     using EnumerableSet for EnumerableSet.UintSet;
     using SafeMath for uint256;
+     
 
      struct Tier {
         uint256 baseLoanSize;
@@ -108,7 +112,7 @@ contract TellerNFTDictionary is  IStakeableNFT, ERC721Upgradeable, AccessControl
 
         //uint256 filter = 255; // equals 11111111 in binary
 
-        uint256 offset = (tokenId.mod(32).mul(8)); 
+        uint256 offset = (tokenId.mod(32).mul(1)); 
 
         uint8 tierIndex = uint8( (compressedRegister << offset) );
         //uint8 bit7 = a & (1 << 6)

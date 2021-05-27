@@ -26,15 +26,46 @@ describe("TellerNFTDictionary", async function() {
 
   it("Should add token tier mappings", async function() {
 
-   // getTokenTier
+   // setTokenTierMappingCompressed 
 
+   let tokenTiers = [0,33,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1]
+   let tokenTierMappingCompressed = [] 
 
+   let tokenTierMappingLengthMax = tokenTiers.length / 32 
+  
+   for(let i=0;i<tokenTierMappingLengthMax;i++){
 
+    let newRow = '0x' 
 
-    await dictionaryContract.addTokenTierMapping( [ '0x11111111' ] , {from:signerAccount.address }) ;  
+    for(let j=0;j<32;j++){
+      let tokenId = i*32 + j;
+
+      if(tokenId < tokenTiers.length){
+        let tierLevelHexBytes = tokenTiers[tokenId].toString(16);
+        console.log('tier level hex bytes', tierLevelHexBytes.padStart(2, '0'))
+        newRow+=tierLevelHexBytes.padStart(2, '0') 
+      }else{
+        newRow+='00' 
+      }
+      
+
+    }
+
     
-     let tokenTierIndex = await dictionaryContract.getTokenTierIndex('0')
-     expect(tokenTierIndex).to.equal("2500000000000000000000");
+
+    tokenTierMappingCompressed.push(newRow)
+    
+   }
+   console.log('tokenTierMappingCompressed',tokenTierMappingCompressed)
+
+
+   let gasEstimate =  await dictionaryContract.estimateGas.addTokenTierMapping( tokenTierMappingCompressed , {from:signerAccount.address }) ;  
+   console.log(' addTokenTierMapping gasEstimate',gasEstimate.toString())
+
+    await dictionaryContract.addTokenTierMapping( tokenTierMappingCompressed , {from:signerAccount.address }) ;  
+    
+     let tokenTierIndex = await dictionaryContract.getTokenTierIndex('2')
+     expect(tokenTierIndex).to.equal("33");
    
 
 
