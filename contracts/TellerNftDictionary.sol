@@ -74,9 +74,14 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
         _;
     }
 
-    constructor(){        
-      _setupRole(ADMIN, msg.sender);
+    constructor(  ){        
+      _setupRole(ADMIN, msg.sender );
+
+       //setAllTokenTierMappings(tiersMapping);
     }
+
+
+
 
    
 
@@ -174,7 +179,7 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
     } 
 
     function setAllTokenTierMappings(uint256[] memory tiersMapping) 
-    external 
+    public 
     onlyAdmin {
 
         for(uint256 i=0; i< tiersMapping.length; i++){
@@ -184,12 +189,22 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
     } 
 
     function setTokenTierMapping(uint256 index, uint256 tierMapping) 
-    external 
+    public 
     onlyAdmin {
          
       _tokenTierMappingCompressed[index] = tierMapping; 
          
     } 
+
+
+    //Write a method that allows for setting a new tierindex of a new token
+    function setSpecificTokenTierForTokenId(uint256 index, uint256 tokenTier)
+    public 
+    onlyAdmin
+    {
+
+    }
+
 
     
     function supportsInterface(bytes4 interfaceId)
