@@ -102,6 +102,10 @@ describe("TellerNFTDictionary", async function() {
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1]
+
+    
+   console.log('tokenTiers length', tokenTiers.length) 
+    
    let tokenTierMappingCompressed = [] 
 
    let tokenTierMappingLengthMax = tokenTiers.length / 32 
@@ -115,7 +119,7 @@ describe("TellerNFTDictionary", async function() {
 
       if(tokenId < tokenTiers.length){
         let tierLevelHexBytes = tokenTiers[tokenId].toString(16);
-        console.log('tier level hex bytes', tierLevelHexBytes.padStart(2, '0'))
+        //console.log('tier level hex bytes', tierLevelHexBytes.padStart(2, '0'))
         newRow+=tierLevelHexBytes.padStart(2, '0') 
       }else{
         newRow+='00' 
