@@ -24,11 +24,28 @@ describe("TellerNFTDictionary", async function() {
    
   });
 
+  it("Should bit shift", async function() {
+
+  
+    let results = await dictionaryContract.bitshiftTesting( )
+    // this is not hex-  this is bytes 
+    // 0x0021020100030201000302010003020100030201000302010003020100030201
+
+    //BINARY
+    // 100001000000100000000100000000000000110000001000000001000000000000001100000010000000010000000000000011000000100000000100000000000000110000001000000001000000000000001100000010000000010000000000000011000000100000000100000000000000110000001000000001
+
+    expect(results).to.equal(3);
+  
+
+
+  });
+
   it("Should add token tier mappings", async function() {
 
    // setTokenTierMappingCompressed 
 
-   let tokenTiers = [0,33,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
+   let tokenTiers = [
+    0,33,2,42,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
@@ -141,8 +158,17 @@ describe("TellerNFTDictionary", async function() {
 
     await dictionaryContract.addTokenTierMapping( tokenTierMappingCompressed , {from:signerAccount.address }) ;  
     
-     let tokenTierIndex = await dictionaryContract.getTokenTierIndex('2')
-     expect(tokenTierIndex).to.equal("33");
+     let tokenTierIndex = await dictionaryContract.getTokenTierIndex('1')
+     expect(tokenTierIndex).to.equal(33);
+
+     tokenTierIndex = await dictionaryContract.getTokenTierIndex('2')
+     expect(tokenTierIndex).to.equal(2);
+
+     tokenTierIndex = await dictionaryContract.getTokenTierIndex('0')
+     expect(tokenTierIndex).to.equal(0);
+
+     tokenTierIndex = await dictionaryContract.getTokenTierIndex('3')
+     expect(tokenTierIndex).to.equal(42);
    
 
 

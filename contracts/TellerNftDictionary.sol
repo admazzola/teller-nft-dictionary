@@ -101,8 +101,7 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
         view
          
         returns (uint8 index_)
-    {
-        //index_ = _tokenTier[tokenId]; 
+    { 
 
         //32 * 8 = 256 - each uint256 holds the data of 32 tokens . 8 bits each.  
 
@@ -110,15 +109,25 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
 
         uint256 compressedRegister = _tokenTierMappingCompressed[mappingIndex];
 
-        //uint256 filter = 255; // equals 11111111 in binary
 
-        uint256 offset = (tokenId.mod(32).mul(1)); 
+        //use 31 instead of 32 to account for the '0x' in the start. 
+        //the '31 -' reverses our bytes order which is necessary
 
-        uint8 tierIndex = uint8( (compressedRegister << offset) );
-        //uint8 bit7 = a & (1 << 6)
+        uint256 offset =  ((31 - tokenId.mod(32)).mul(8)); 
+
+        uint8 tierIndex = uint8( (compressedRegister >> offset) ); 
 
         return tierIndex ;
 
+    }
+
+    function bitshiftTesting() public view returns (uint8){
+
+        bytes32 testInput = 0x0021020100030201000302010003020100030201000302010003020100030201;
+
+        uint256 indexToReturn = 2  ;
+
+        return uint8(uint256(testInput >>  indexToReturn.mul(8))    );
     }
 
     /**
