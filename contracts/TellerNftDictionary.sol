@@ -188,7 +188,7 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
     } 
 
 
-    //Write a method that allows for setting a new tierindex of a new token
+    
     function setTokenTierForTokenId(uint256 tokenId, uint256 tokenTier)
     public 
     onlyAdmin
