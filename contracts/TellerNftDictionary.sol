@@ -1,5 +1,5 @@
 /**
- * @notice TellerNFTDictionary Version 1.0
+ * @notice TellerNFTDictionary Version 1.01
  *
  * @notice This contract is used to gather data for TellerV1 NFTs more efficiently.
  * @notice This contract has data which must be continuously synchronized with the TellerV1 NFT data
