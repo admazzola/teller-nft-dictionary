@@ -152,33 +152,39 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
      *  - Caller must have the {Admin} role
      */
     function setTier(uint256 index, Tier memory newTier) 
-    external 
-    onlyAdmin {
+    external     
+    onlyAdmin 
+    returns (bool){
        
         _baseLoanSizes[index] = newTier.baseLoanSize;
         _hashes[index] = newTier.hashes;
         _contributionAsset[index] = newTier.contributionAsset;
         _contributionSize[index] = newTier.contributionSize;
         _contributionMultiplier[index] = newTier.contributionMultiplier;
-         
+
+        return true;
     } 
 
     function setAllTokenTierMappings(uint256[] memory tiersMapping) 
-    public 
-    onlyAdmin {
+    public     
+    onlyAdmin
+    returns (bool) {
 
         for(uint256 i=0; i< tiersMapping.length; i++){
             _tokenTierMappingCompressed[i] = tiersMapping[i];
         } 
-         
+
+        return true;
     } 
 
     function setTokenTierMapping(uint256 index, uint256 tierMapping) 
     public 
-    onlyAdmin {
+    onlyAdmin
+    returns (bool) {
          
-      _tokenTierMappingCompressed[index] = tierMapping; 
-         
+        _tokenTierMappingCompressed[index] = tierMapping; 
+    
+        return true;
     } 
 
 
@@ -192,7 +198,6 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
 
         uint256 existingRegister = _tokenTierMappingCompressed[mappingIndex];
  
-
         uint256 offset =  ((31 - tokenId.mod(32)).mul(8));
 
         uint256 updateMaskShifted = 0x00000000000000000000000000000000000000000000000000000000000000FF << offset;
@@ -202,11 +207,9 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
         uint256 tokenTierShifted = (( 0x0000000000000000000000000000000000000000000000000000000000000000 | 0x0b) << offset);
 
         uint256 existingRegisterClearedWithMask = existingRegister & updateMaskShiftedNegated;
-
          
         uint256 updatedRegister = existingRegisterClearedWithMask | tokenTierShifted;
           
-
         _tokenTierMappingCompressed[mappingIndex] = updatedRegister;
 
         return true;
