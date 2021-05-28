@@ -678,8 +678,8 @@
       ]
     },
     "/home/andy/FULLTIME/teller-nft-dictionary/contracts/TellerNftDictionary.sol": {
-      "lastModificationDate": 1622155982079,
-      "contentHash": "7b57a71f357dbcc482ebbb11904dc9cc",
+      "lastModificationDate": 1622165099441,
+      "contentHash": "8430b2ee0ce9cdbaa6028a4109c9222b",
       "sourceName": "contracts/TellerNftDictionary.sol",
       "solcConfig": {
         "version": "0.8.3",

@@ -174,8 +174,16 @@ describe("TellerNFTDictionary", async function() {
 
      tokenTierIndex = await dictionaryContract.getTokenTierIndex('44')
      expect(tokenTierIndex).to.equal(0);
-   
+ 
 
+     let testResult = await dictionaryContract.bitBanging('44','11') 
+      console.log('testResult',testResult.toHexString())
+
+
+     await dictionaryContract.setTokenTierForTokenId(44,11)
+
+     tokenTierIndex = await dictionaryContract.getTokenTierIndex('44')
+     expect(tokenTierIndex).to.equal(11); 
 
   });
 

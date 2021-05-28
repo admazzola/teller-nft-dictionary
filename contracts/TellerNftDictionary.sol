@@ -24,7 +24,7 @@ import "./IStakeableNFT.sol";
  *
  * @author develop@teller.finance
  */
-contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessControlUpgradeable  {
+contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
      
     using EnumerableSet for EnumerableSet.UintSet;
     using SafeMath for uint256;
@@ -77,7 +77,7 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
     constructor(  ){        
       _setupRole(ADMIN, msg.sender );
 
-       //setAllTokenTierMappings(tiersMapping);
+      //setAllTokenTierMappings(tiersMapping);
     }
 
 
@@ -126,14 +126,7 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
 
     }
 
-    function bitshiftTesting() public view returns (uint8){
-
-        bytes32 testInput = 0x0021020100030201000302010003020100030201000302010003020100030201;
-
-        uint256 indexToReturn = 2  ;
-
-        return uint8(uint256(testInput >>  indexToReturn.mul(8))    );
-    }
+    
 
     /**
      * @notice It returns an array of token IDs owned by an address.
@@ -161,15 +154,7 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
     function setTier(uint256 index, Tier memory newTier) 
     external 
     onlyAdmin {
-       /* Tier storage tier = _tiers[index];
-
-        tier.baseLoanSize = newTier.baseLoanSize;
-        tier.hashes = newTier.hashes;
-        tier.contributionAsset = newTier.contributionAsset;
-        tier.contributionSize = newTier.contributionSize;
-        tier.contributionMultiplier = newTier.contributionMultiplier;
-         */
-           
+       
         _baseLoanSizes[index] = newTier.baseLoanSize;
         _hashes[index] = newTier.hashes;
         _contributionAsset[index] = newTier.contributionAsset;
@@ -198,32 +183,52 @@ contract TellerNFTDictionary is   IStakeableNFT, ERC721Upgradeable, AccessContro
 
 
     //Write a method that allows for setting a new tierindex of a new token
-    function setSpecificTokenTierForTokenId(uint256 index, uint256 tokenTier)
+    function setTokenTierForTokenId(uint256 tokenId, uint256 tokenTier)
     public 
     onlyAdmin
+    returns (bool)
     {
+        uint256 mappingIndex = tokenId.div(32);
 
+        uint256 existingRegister = _tokenTierMappingCompressed[mappingIndex];
+ 
+
+        uint256 offset =  ((31 - tokenId.mod(32)).mul(8));
+
+        uint256 updateMaskShifted = 0x00000000000000000000000000000000000000000000000000000000000000FF << offset;
+
+        uint256 updateMaskShiftedNegated = ~updateMaskShifted;
+
+        uint256 tokenTierShifted = (( 0x0000000000000000000000000000000000000000000000000000000000000000 | 0x0b) << offset);
+
+        uint256 existingRegisterClearedWithMask = existingRegister & updateMaskShiftedNegated;
+
+         
+        uint256 updatedRegister = existingRegisterClearedWithMask | tokenTierShifted;
+          
+
+        _tokenTierMappingCompressed[mappingIndex] = updatedRegister;
+
+        return true;
     }
-
-
+ 
     
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(AccessControlUpgradeable, ERC721Upgradeable)
+        override(AccessControlUpgradeable)
         returns (bool)
     {
         return
             interfaceId == type(IStakeableNFT).interfaceId ||
-            ERC721Upgradeable.supportsInterface(interfaceId) ||
+           
             AccessControlUpgradeable.supportsInterface(interfaceId);
     }
   
 
     /**
         New methods for the dictionary
-    */
-
+    */ 
 
      /**
      * @notice It returns information about the type of NFT.     * 
