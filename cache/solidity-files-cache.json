@@ -678,8 +678,8 @@
       ]
     },
     "/home/andy/FULLTIME/teller-nft-dictionary/contracts/TellerNftDictionary.sol": {
-      "lastModificationDate": 1622165594758,
-      "contentHash": "82b065f36f4e186d722afa87e7b3afbe",
+      "lastModificationDate": 1622177783799,
+      "contentHash": "47943f6d1e2c55499b8478f99675bade",
       "sourceName": "contracts/TellerNftDictionary.sol",
       "solcConfig": {
         "version": "0.8.3",
@@ -717,8 +717,8 @@
       ]
     },
     "/home/andy/FULLTIME/teller-nft-dictionary/contracts/IStakeableNFT.sol": {
-      "lastModificationDate": 1621980471380,
-      "contentHash": "f7b98a65cfc803650012b69c19ed25af",
+      "lastModificationDate": 1622177773611,
+      "contentHash": "5584104d6dea77f6ecf38f5828cac8d5",
       "sourceName": "contracts/IStakeableNFT.sol",
       "solcConfig": {
         "version": "0.8.3",

@@ -1,6 +1,16 @@
-// SPDX-License-Identifier: MIT
+/**
+ * @notice TellerNFTDictionary Version 1.0
+ *
+ * @notice This contract is used to gather data for TellerV1 NFTs more efficiently.
+ * @notice This contract has data which must be continuously synchronized with the TellerV1 NFT data
+ *
+ * @author develop@teller.finance
+ */
+
+
+
 pragma solidity ^0.8.0;
-//pragma experimental ABIEncoderV2;
+
 
 // Contracts
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
@@ -126,20 +136,6 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
 
     
 
-    /**
-     * @notice It returns an array of token IDs owned by an address.
-     * @dev It uses a EnumerableSet to store values and loops over each element to add to the array.
-     * @dev Can be costly if calling within a contract for address with many tokens.
-     */
-    function getTierHashes(uint256 tierIndex)
-        public
-        view
-         
-        returns (string[] memory hashes_)
-    {
-
-      hashes_ = _hashes[tierIndex];
-    } 
 
     /**
      * @notice Adds a new Tier to be minted with the given information.
@@ -231,6 +227,56 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
         New methods for the dictionary
     */ 
 
+
+
+    /**
+     * @notice It returns an array of token IDs owned by an address.
+     * @dev It uses a EnumerableSet to store values and loops over each element to add to the array.
+     * @dev Can be costly if calling within a contract for address with many tokens.
+     */
+    function getTierHashes(uint256 tierIndex)
+        public
+        view         
+        returns (string[] memory hashes_)
+    {
+
+      hashes_ = _hashes[tierIndex];
+    } 
+
+    function getTierBaseLoanSize(uint256 tokenTier)
+        public
+        view            
+        returns (uint256)
+    {    
+        return _baseLoanSizes[tokenTier];
+    }
+
+    function getTierContributionAsset(uint256 tokenTier)
+        public
+        view               
+        returns (address)
+    {    
+        return _contributionAsset[tokenTier];
+    }
+
+    function getTierContributionSize(uint256 tokenTier)
+        public
+        view               
+        returns (uint256)
+    {    
+        return _contributionSize[tokenTier];
+    }
+
+    function getTierContributionMultiplier(uint256 tokenTier)
+        public
+        view               
+        returns (uint8)
+    {    
+        return _contributionMultiplier[tokenTier];
+    }
+
+
+
      /**
      * @notice It returns information about the type of NFT.     * 
      */
@@ -312,8 +358,8 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
     function tokenContributionMultiplier(uint256 tokenId)
         public
         view    
-        override   
-        returns (uint256)
+        override         
+        returns (uint8)
     {  
         uint8 tokenTier = getTokenTierIndex(tokenId);
        

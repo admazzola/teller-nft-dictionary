@@ -403,7 +403,7 @@ describe("TellerNFTDictionary", async function() {
     expect(tokenContributionSize).to.equal("1000000000000000000");
    
     let tokenContributionMultiplier = await dictionaryContract.tokenContributionMultiplier('0')
-    expect(tokenContributionMultiplier).to.equal("150");
+    expect(tokenContributionMultiplier).to.equal(150);
    
 
   });
