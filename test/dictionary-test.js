@@ -49,7 +49,7 @@ describe("TellerNFTDictionary", async function() {
 
    let tokenTiers = [
     0,12,2,6,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
-    0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
+    0,77,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
     0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,
@@ -173,18 +173,19 @@ describe("TellerNFTDictionary", async function() {
      tokenTierIndex = await dictionaryContract.getTokenTierIndex('3')
      expect(tokenTierIndex).to.equal(6);
    
-
-
-     tokenTierIndex = await dictionaryContract.getTokenTierIndex('44')
-     expect(tokenTierIndex).to.equal(0);
  
 
+     tokenTierIndex = await dictionaryContract.getTokenTierIndex('21')
+     expect(tokenTierIndex).to.equal(77);
+
+
+ 
     
 
-     await dictionaryContract.setTokenTierForTokenId(44,11)
+     await dictionaryContract.setTokenTierForTokenId(44,66)
 
      tokenTierIndex = await dictionaryContract.getTokenTierIndex('44')
-     expect(tokenTierIndex).to.equal(11); 
+     expect(tokenTierIndex).to.equal(66); 
 
 
 

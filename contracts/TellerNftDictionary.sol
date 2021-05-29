@@ -102,6 +102,28 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
         return tierIndex;
     }
 
+
+     /* function bitBashing(uint256 tokenId)
+        public
+        view
+        returns (uint256  )
+    {
+        //32 * 8 = 256 - each uint256 holds the data of 32 tokens . 8 bits each.
+
+        uint256 mappingIndex = tokenId / 32;
+
+        uint256 compressedRegister = _tokenTierMappingCompressed[mappingIndex];
+
+        //use 31 instead of 32 to account for the '0x' in the start.
+        //the '31 -' reverses our bytes order which is necessary
+
+        uint256 offset = ((1 +  (tokenId % 32))  );  //19  
+
+        uint8 tierIndex = uint8((compressedRegister >> (offset*8)));
+
+        return tierIndex;
+    }*/
+
     /**
      * @notice Adds a new Tier to be minted with the given information.
      * @dev It auto increments the index of the next tier to add.
@@ -159,6 +181,8 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
         return true;
     }
 
+
+ 
     function setTokenTierForTokenId(uint256 tokenId, uint256 tokenTier)
         public
         onlyAdmin
@@ -178,7 +202,7 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
 
         uint256 tokenTierShifted =
             ((0x0000000000000000000000000000000000000000000000000000000000000000 |
-                0x0b) << offset);
+                tokenTier) << offset);
 
         uint256 existingRegisterClearedWithMask =
             existingRegister & updateMaskShiftedNegated;
@@ -188,9 +212,7 @@ contract TellerNFTDictionary is IStakeableNFT, AccessControlUpgradeable {
 
         _tokenTierMappingCompressed[mappingIndex] = updatedRegister;
 
-         console.log('set token tier ', tokenId, tokenTier);
-
-
+         
         return true;
     }
 
