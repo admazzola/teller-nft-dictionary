@@ -6,10 +6,10 @@
       "contentHash": "cc4777addd464ea56fa35b1c45df0591",
       "sourceName": "hardhat/console.sol",
       "solcConfig": {
-        "version": "0.7.3",
+        "version": "0.8.3",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {
@@ -678,8 +678,8 @@
       ]
     },
     "/home/andy/FULLTIME/teller-nft-dictionary/contracts/TellerNftDictionary.sol": {
-      "lastModificationDate": 1622177783799,
-      "contentHash": "47943f6d1e2c55499b8478f99675bade",
+      "lastModificationDate": 1622254662405,
+      "contentHash": "735af2e62817761f598b22d18e005232",
       "sourceName": "contracts/TellerNftDictionary.sol",
       "solcConfig": {
         "version": "0.8.3",
@@ -705,8 +705,7 @@
       },
       "imports": [
         "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol",
-        "@openzeppelin/contracts/utils/structs/EnumerableSet.sol",
-        "@openzeppelin/contracts/utils/math/SafeMath.sol",
+        "hardhat/console.sol",
         "./IStakeableNFT.sol"
       ],
       "versionPragmas": [
@@ -717,8 +716,8 @@
       ]
     },
     "/home/andy/FULLTIME/teller-nft-dictionary/contracts/IStakeableNFT.sol": {
-      "lastModificationDate": 1622177773611,
-      "contentHash": "5584104d6dea77f6ecf38f5828cac8d5",
+      "lastModificationDate": 1622254681349,
+      "contentHash": "31581178ba10d2de2620b70e1fc0caa8",
       "sourceName": "contracts/IStakeableNFT.sol",
       "solcConfig": {
         "version": "0.8.3",

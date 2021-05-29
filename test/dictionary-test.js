@@ -16,11 +16,14 @@ describe("TellerNFTDictionary", async function() {
     signerAccount = Dictionary.signer; 
      
     dictionaryContract = await Dictionary.deploy(  );
+
     
     await dictionaryContract.deployed();  
-
-    let type = await dictionaryContract.stakeableTokenType()
-    expect(type).to.equal("0x2213d707f04cdfd263a540394e2a26bbf3a63d6ad89a37f534d2ee35bdfe0d38");
+ 
+    await dictionaryContract.initialize( signerAccount.address  , {from:signerAccount.address }) ;  
+    
+    //let type = await dictionaryContract.stakeableTokenType()
+    //expect(type).to.equal("0x2213d707f04cdfd263a540394e2a26bbf3a63d6ad89a37f534d2ee35bdfe0d38");
    
   });
 
@@ -182,6 +185,13 @@ describe("TellerNFTDictionary", async function() {
 
      tokenTierIndex = await dictionaryContract.getTokenTierIndex('44')
      expect(tokenTierIndex).to.equal(11); 
+
+
+
+     await dictionaryContract.setTokenTierForTokenId(2225,7)
+
+     tokenTierIndex = await dictionaryContract.getTokenTierIndex('2225')
+     expect(tokenTierIndex).to.equal(7); 
 
   });
 
@@ -404,6 +414,9 @@ describe("TellerNFTDictionary", async function() {
    
     let tokenContributionMultiplier = await dictionaryContract.tokenContributionMultiplier('0')
     expect(tokenContributionMultiplier).to.equal(150);
+
+
+      
    
 
   });
